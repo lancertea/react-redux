@@ -1,5 +1,5 @@
 import reducer from './reducer';
-//applyMiddlewares: Redux 的原生方法，作用是将所有中间件组成一个数组，依次执行
+//applyMiddleware: Redux 的原生方法，作用是将所有中间件组成一个数组，依次执行
 //applyMiddleware(thunk, promise, logger)  logger就一定要放在最后，否则输出结果会不正确
 import { createStore, applyMiddleware, compose } from 'redux';
 
@@ -8,8 +8,8 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 //中间件 redux-saga
-import createSagaMiddleware from 'redux-saga';//导入的是一个函数
-import mySaga from './saga';
+//import createSagaMiddleware from 'redux-saga';//导入的是一个函数
+//import mySaga from './saga';
 
 
 //没用thunk之前 home-home4
