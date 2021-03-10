@@ -68,3 +68,8 @@ mapDispatchToProps: Redux store’s dispatch
 2. mapDispatchToProps?: Object | (dispatch, ownProps?) => Object
 mapDispatchToProps是connect函数的第二个参数，用来建立 UI 组件的参数到store.dispatch方法的映射。也就是说，它定义了哪些用户的操作应该当作 Action，传给 Store。它可以是一个函数，也可以是一个对象。
 如果mapDispatchToProps是一个函数，会得到dispatch和ownProps（容器组件的props对象）两个参数。
+
+#### state管理方案
+UI相关的组件内部可以维护的状态，在组件内部自己来维护
+只要是需要共享的状态，都交给redux来管理和维护
+从服务器请求的数据（包括请求的操作），交给redux来维护
