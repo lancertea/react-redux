@@ -5,25 +5,12 @@
 ### home1 自实现connect函数提取公共部分
 ### home2 利用创建的context处理自实现connect函数依赖导入的store问题
 ### home3 使用官方connect提供的函数
-#### connect
-function connect(mapStateToProps?, mapDispatchToProps?, mergeProps?, options?)
-1. mapStateToProps?: Function
-2. mapDispatchToProps?: Function | Object
-3. mergeProps?: Function
-4. options?: Object
-
-mapStateToProps: Redux store’s state
-mapDispatchToProps: Redux store’s dispatch
-
-这两个参数作为mergeProps的第一、二个参数，第三个是ownProps。然后将合并后的结果（通常称为mergedProps）提供给连接的组件。
-
-1. mapStateToProps?: (state, ownProps?) => Object
-如果指定了mapStateToProps函数，则返回的新组件将订阅Redux存储更新。 这意味着无论何时更新store，都会调用mapStateToProps。 mapStateToProps的结果必须是一个普通对象，该对象将合并到新组件的props中。 如果不想订阅store更新，请传递null或undefined代替mapStateToProps
 
 ### home4 组件中的异步请求
 ### home5 使用中间件发送异步请求  redux-thunk
 ### home6 使用中间件发送异步请求  redux-saga*
 
+#### 基础概念
 redux设计思想
 Web应用是一个状态机，视图与状态是一一对应的
 所有的状态，保存在一个对象里面
@@ -54,4 +41,30 @@ const action = {
 Reducer: Store 收到 Action 以后，必须给出一个新的 State，这样 View 才会发生变化。这种 State 的计算过程就叫做 Reducer。Reducer 是一个函数，它接受 Action 和当前 State 作为参数，返回一个新的 State。
 
 
+#### connect
+如果一个组件既有 UI 又有业务逻辑，将它拆分成下面的结构：外面是一个容器组件，里面包了一个UI 组件。前者负责与外部的通信，将数据传给后者，由后者渲染出视图
+输入逻辑：外部的数据（即state对象）如何转换为 UI 组件的参数
+输出逻辑：用户发出的动作如何变为 Action 对象，从 UI 组件传出去
 
+connect方法接受两个参数：mapStateToProps和mapDispatchToProps。它们定义了 UI 组件的业务逻辑
+前者负责输入逻辑，即将state映射到 UI 组件的参数（props）
+后者负责输出逻辑，即将用户对 UI 组件的操作映射成 Action
+
+function connect(mapStateToProps?, mapDispatchToProps?, mergeProps?, options?)
+1. mapStateToProps?: Function
+2. mapDispatchToProps?: Function | Object
+3. mergeProps?: Function
+4. options?: Object
+
+mapStateToProps: Redux store’s state
+mapDispatchToProps: Redux store’s dispatch
+
+这两个参数作为mergeProps的第一、二个参数，第三个是ownProps。然后将合并后的结果（通常称为mergedProps）提供给连接的组件。
+
+1. mapStateToProps?: (state, ownProps?) => Object
+如果指定了mapStateToProps函数，mapStateToProps会订阅 Store，每当state更新的时候，就会自动执行，重新计算 UI 组件的参数，从而触发 UI 组件的重新渲染。mapStateToProps的结果必须是一个普通对象，该对象将合并到新组件的props中。 如果不想订阅store更新，请传递null或undefined代替mapStateToProps
+第二个参数ownProps，代表容器组件的props对象，使用ownProps作为参数后，如果容器组件的参数发生变化，也会引发 UI 组件重新渲染。
+
+2. mapDispatchToProps?: Object | (dispatch, ownProps?) => Object
+mapDispatchToProps是connect函数的第二个参数，用来建立 UI 组件的参数到store.dispatch方法的映射。也就是说，它定义了哪些用户的操作应该当作 Action，传给 Store。它可以是一个函数，也可以是一个对象。
+如果mapDispatchToProps是一个函数，会得到dispatch和ownProps（容器组件的props对象）两个参数。
